@@ -1,3 +1,4 @@
+const serverless = require('serverless-http')
 const express = require('express')
 const OpenAI = require('openai')
 //import dotenv from "dotenv";
@@ -12,7 +13,12 @@ const openai = new OpenAI({
 
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
-app.use(cors())
+//app.use(cors())
+let corsOptions = {
+    origin: '{chatdojg.pages.dev}',
+    credential: true
+}
+app.use(cors(corsOptions));
 
 app.post('/fortuneTell',  async function (req, res, next) {
 
@@ -64,6 +70,7 @@ app.post('/fortuneTell',  async function (req, res, next) {
     res.json({"assistant" : fortune})
 })
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+module.exports.handler = serverless(app)
+//app.listen(port, () => {
+//  console.log(`Example app listening on port ${port}`)
+//})
